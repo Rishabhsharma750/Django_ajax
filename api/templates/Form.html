@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<div class="container">
+    <h1 style="text-align:center">First Project</h1>
+    <br>
+    <div class="container">
+
+        <form action="{% url 'form' %}" id="form_submit" class="bg-light">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="fnames">First Name</label>
+                <input type="text" name="fname" id="fnames" class="form-control fname" autocomplete="off"
+                       placeholder="Enter first Name">
+
+            </div>
+            <div class="form-group">
+                <label for="lnames">Last Name</label>
+                <input type="text" name="lname" id="lnames" class="form-control lname" autocomplete="off"
+                       placeholder="Enter Last Name">
+
+            </div>
+            <div class="form-group">
+                <label for="emails">Email</label>
+                <input type="email" name="email" id="emails" class="form-control email" autocomplete="off"
+                       placeholder="Enter Email">
+
+            </div>
+            <div class="form-group">
+                <label for="subjects">Subject</label>
+                <input type="text" name="subject" id="subjects" class="form-control subject" autocomplete="off"
+                       placeholder="Enter Subject">
+
+            </div>
+            <button type="submit" id="submitbtn" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+$(document).on('submit','#form_submit',function(e){
+    e.preventDefault();
+    $('.hasDanger').remove();
+    $.ajax({
+      type:'POST',
+      url:$(this).attr('action'),
+      dataType:'JSON',
+      data: $(this).serialize(),
+      success: function(data)
+      {
+            console.log(data )
+            if(data.result == 'failed')
+            {
+                $.each(data.message,function(key,value){
+                    $('.'+key).parent().append('<span class="text-danger hasDanger">'+value+'</span>');
+                });
+            }
+            else{
+                Swal.fire({
+                          icon: 'success',
+                          title: 'Success!',
+                          text: 'User Saved Successfully',
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            window.location = data.link
+                          }
+                        })
+            }
+
+      },
+      error: function(data)
+      {
+        console.log(data )
+      }
+    });
+});
+
+</script>
+</body>
+</html>
