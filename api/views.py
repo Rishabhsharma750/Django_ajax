@@ -26,3 +26,40 @@ def form(request):
             response_data['message'] = forms.errors
         return JsonResponse(response_data)
     return render(request, 'Form.html')
+
+
+def table_data(request):
+    return render(request, 'table.html')
+
+
+def datalist(request):
+    response_Data = {'data': []}
+    data_list = []
+    Infos = Data.objects.all()
+
+    for info in Infos:
+        data_dict = {'first_name': info.fname,
+                     'last_name': info.lname,
+                     'email': info.email,
+                     'subject': info.subject}
+        data_list.append(data_dict)
+        response_Data["data"] = data_list
+
+    return JsonResponse(response_Data)
+
+
+def withajaxdata(request):
+    # response_Data = {}
+    Infos = Data.objects.all()
+    datalist = []
+    for info in Infos:
+        list = "<tr>"\
+                  "<th scope="">"+info.fname+"</th>"\
+                  "<td>"+info.fname+"</td>"\
+                  "<td>"+info.fname+"</td>"\
+                  "<td>"+info.fname+"</td>"\
+                "</tr>"
+        datalist.append(list)
+        # response_Data = datalist
+
+    return JsonResponse({'data': datalist})

@@ -1,29 +1,23 @@
+{% load static %}
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-
+    <link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-    <title>Hello, world!</title>
+    <title>Djang-Ajax</title>
 </head>
+{% block body %}
 <body>
 <div class="container">
-    <h1 style="text-align:center">First Project</h1>
+    <h1 style="text-align:center">Django-Ajax Form</h1>
     <br>
     <div class="container">
 
@@ -54,11 +48,16 @@
 
             </div>
             <button type="submit" id="submitbtn" class="btn btn-primary">Submit</button>
+            <a class="btn btn-primary" href="{% url 'table_data' %}" role="button">Show Tables</a>
         </form>
     </div>
 </div>
+{% endblock %}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
 <script>
+datalist();
 $(document).on('submit','#form_submit',function(e){
     e.preventDefault();
     $('.hasDanger').remove();
@@ -96,6 +95,47 @@ $(document).on('submit','#form_submit',function(e){
     });
 });
 
+function datalist()
+{
+    console.log('hello')
+    $.ajax({
+      type:'GET',
+      url:'/withajaxdata/',
+      dataType:'JSON',
+      data: $(this).serialize(),
+      success: function(response)
+      {
+         console.log(response)
+         $('.datalist').html(response.data)
+      },
+      error: function(data)
+      {
+        console.log(data )
+      }
+    })
+}
+
+</script>
+<script>
+$(document).ready(function(e){
+
+    $('#table_content').DataTable({
+
+     ajax:{
+          url: '/datalist/',
+          dataSrc: 'data',
+          type: 'GET',
+      },
+      columns:[
+              {data:'first_name'},
+              {data:'last_name'},
+              {data:'email'},
+              {data:'subject'},
+      ]
+
+    })
+
+});
 </script>
 </body>
 </html>
