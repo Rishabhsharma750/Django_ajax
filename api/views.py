@@ -55,9 +55,9 @@ def withajaxdata(request):
     for info in Infos:
         list = "<tr>"\
                   "<th scope="">"+info.fname+"</th>"\
-                  "<td>"+info.fname+"</td>"\
-                  "<td>"+info.fname+"</td>"\
-                  "<td>"+info.fname+"</td>"\
+                  "<td>"+info.lname+"</td>"\
+                  "<td>"+info.email+"</td>"\
+                  "<td>"+info.subject+"</td>"\
                 "</tr>"
         datalist.append(list)
         # response_Data = datalist
